@@ -1,0 +1,94 @@
+<!-- =====================================================
+   HEADER/FOOTER SNIPPET FOR PUNCH LIST HANDYMAN
+   Copy and paste this into each HTML page
+   ===================================================== -->
+
+<!-- HEADER -->
+<header>
+    <nav>
+        <a href="/" class="logo">
+            <img src="/assets/img/punch-list-handyman-logo-removebg.png" alt="Punch List Handyman">
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+        <ul class="nav-links">
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="/pricing.html">Pricing</a></li>
+            <li><a href="/what-fits.html">What Fits</a></li>
+                <li><a href="/book.html">Book</a></li>
+                <li><a href="https://calendly.com/punch-list-handyman" class="btn-primary">Book My Knockout</a></li>
+            </ul>
+        </nav>
+    </header><!-- FOOTER -->
+<footer>
+    <div class="footer-content">
+        <div class="footer-service-area">Serving Dallas–Fort Worth</div>
+        <div class="footer-business-name">Punch List Handyman</div>
+        <div class="footer-links">
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Service</a>
+        </div>
+    </div>
+</footer>
+
+<!-- MOBILE NAV TOGGLE SCRIPT (place before closing </body> tag) -->
+<script>
+    // Mobile nav toggle
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (navToggle) {
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    }
+</script>
+
+<!-- =====================================================
+   USAGE NOTES:
+   
+   1. Replace https://calendly.com/punch-list-handyman with your actual external 
+      booking system URL (Calendly, TidyCal, etc.)
+   
+   2. This header/footer is already implemented in all
+      existing HTML files
+   
+   3. For new pages, use this structure:
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <meta name="description" content="[Page description]">
+          <title>[Page Title] - Punch List Handyman</title>
+          <link rel="stylesheet" href="/assets/css/styles.css">
+      </head>
+      <body>
+          [PASTE HEADER HERE]
+          
+          <main>
+              <section class="container">
+                  <h1>[One H1 per page]</h1>
+                  [Content here]
+              </section>
+          </main>
+          
+          [PASTE FOOTER HERE]
+          [PASTE SCRIPT HERE]
+      </body>
+      </html>
+   
+   4. Brand colors are defined in styles.css:
+      - Charcoal: #2d3748
+      - White: #ffffff
+      - Electric Blue: #0066ff
+      - Safety Orange: #ff6b35
+   
+   5. Use .btn-primary for electric blue buttons
+      Use .btn-secondary for safety orange buttons
+   
+   6. Use .checklist for checkmark lists
+      Use .exclusion-list for X-mark lists
+   
+   7. Mobile nav automatically collapses on screens 
+      < 768px wide
+   ===================================================== -->
