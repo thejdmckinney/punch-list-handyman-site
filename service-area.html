@@ -22,6 +22,10 @@
     
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
     <link rel="stylesheet" href="/assets/css/styles.css?v=4">
+    
+    <!-- Mapbox GL JS -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
 </head>
 <body>
     <header>
@@ -77,29 +81,8 @@
                     </div>
                     
                     <div class="card">
-                        <!-- Optional: Static map image -->
-                        <div style="background-color: var(--light-gray); border: 2px solid var(--border-gray); border-radius: 6px; min-height: 300px; display: flex; align-items: center; justify-content: center;">
-                            <img src="/assets/img/dfw-map.png" alt="Dallas-Fort Worth service area map" style="max-width: 100%; height: auto; display: none;">
-                            <!-- Placeholder until map image is added -->
-                            <p style="color: var(--charcoal); text-align: center; padding: 2rem;">
-                                <strong>Dallas–Fort Worth<br>Service Area</strong><br>
-                                <span style="font-size: 0.9rem;">Map coming soon</span>
-                            </p>
-                        </div>
-                        
-                        <!-- Optional: Google Maps Embed -->
-                        <!-- Uncomment and replace YOUR_GOOGLE_MAPS_EMBED_URL with actual embed URL from Google Maps -->
-                        <!--
-                        <iframe 
-                            src="YOUR_GOOGLE_MAPS_EMBED_URL" 
-                            width="100%" 
-                            height="300" 
-                            style="border: 2px solid var(--border-gray); border-radius: 6px;" 
-                            allowfullscreen="" 
-                            loading="lazy" 
-                            referrerpolicy="no-referrer-when-downgrade">
-                        </iframe>
-                        -->
+                        <!-- Interactive Mapbox Map -->
+                        <div id="map" style="width: 100%; height: 400px; border-radius: 6px; border: 2px solid var(--border-gray);"></div>
                     </div>
                     </div>
                 </div>
@@ -184,6 +167,90 @@
                 navLinks.classList.toggle('active');
             });
         }
+
+        // Initialize Mapbox map
+        mapboxgl.accessToken = 'pk.eyJ1IjoidGhlamRtY2tpbm5leSIsImEiOiJjbWdkeHd1enYwbTVvMm5vZ2cyNWloZzZsIn0.XDn0iUiSQ22h8y1HvqDb0g';
+        
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [-96.7970, 32.7767], // Dallas center
+            zoom: 9.5
+        });
+
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+        // Service area cities with coordinates
+        const cities = [
+            { name: 'Dallas', coords: [-96.7970, 32.7767] },
+            { name: 'Highland Park', coords: [-96.7969, 32.8332] },
+            { name: 'University Park', coords: [-96.8003, 32.8502] },
+            { name: 'Plano', coords: [-96.6989, 33.0198] },
+            { name: 'Richardson', coords: [-96.7298, 32.9483] },
+            { name: 'Allen', coords: [-96.6706, 33.1031] },
+            { name: 'Garland', coords: [-96.6389, 32.9126] },
+            { name: 'Rockwall', coords: [-96.4597, 32.9312] },
+            { name: 'Rowlett', coords: [-96.5364, 32.9029] }
+        ];
+
+        // Add markers for each city
+        cities.forEach(city => {
+            // Create custom marker element
+            const el = document.createElement('div');
+            el.className = 'custom-marker';
+            el.style.backgroundColor = '#0066ff';
+            el.style.width = '12px';
+            el.style.height = '12px';
+            el.style.borderRadius = '50%';
+            el.style.border = '2px solid #ffffff';
+            el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
+
+            // Create popup
+            const popup = new mapboxgl.Popup({ offset: 25 })
+                .setHTML(`<strong style="color: #0066ff;">${city.name}</strong><br><span style="font-size: 0.9rem; color: #718096;">Service Available</span>`);
+
+            // Add marker to map
+            new mapboxgl.Marker(el)
+                .setLngLat(city.coords)
+                .setPopup(popup)
+                .addTo(map);
+        });
+
+        // Draw service area circle
+        map.on('load', () => {
+            // Add a circle layer showing approximate service radius
+            map.addSource('service-area', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-96.7970, 32.7767]
+                    }
+                }
+            });
+
+            map.addLayer({
+                'id': 'service-area-circle',
+                'type': 'circle',
+                'source': 'service-area',
+                'paint': {
+                    'circle-radius': {
+                        'stops': [
+                            [0, 0],
+                            [20, 50000]
+                        ],
+                        'base': 2
+                    },
+                    'circle-color': '#0066ff',
+                    'circle-opacity': 0.1,
+                    'circle-stroke-width': 2,
+                    'circle-stroke-color': '#0066ff',
+                    'circle-stroke-opacity': 0.3
+                }
+            });
+        });
     </script>
 
     <!--Start of Tawk.to Script-->
